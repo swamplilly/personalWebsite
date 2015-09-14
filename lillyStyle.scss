@@ -1,0 +1,318 @@
+$BANNER_HEIGHT: 65vh;
+$ICON_HEIGHT: 300px;
+$ICON_HEIGHT_HALF: $ICON_HEIGHT/2;
+$TEXT_COLOR: white;
+$TEXT_CLICKED_COLOR: red;
+$TEXT_SIZE: 20px;
+$TEXT_FONT: sans-serif;
+$BUTTON_COLOR: pink;
+$BUTTON_SIZE: 50px;
+$NAVBAR_DIST: -55px;
+
+
+/* ---------------------------------- MIXIN STUFF C+P ----------------------------------*/
+
+// DEFAULT OPTIONS
+
+// Prefix for Hover class names
+$nameSpace: 'hvr' !default;
+
+// Durations
+$fastDuration: .1s !default;
+$mediumDuration: .3s !default;
+$slowDuration: .5s !default;
+
+// Colors
+$primaryColor: #e1e1e1 !default;
+$secondaryColor: #666 !default;
+$highlightColor: #ccc !default;
+$activeColor: #2098D1 !default;
+$shadowColor: rgba(0, 0, 0, .6) !default;
+
+// Speech bubbles options
+$tipWidth: 10px !default;  //the width of the speech bubble tip
+$tipHeight: 10px !default; //the height of the speech bubble tip
+$tipColor: $primaryColor !default;
+
+// Arrows options
+$spaceBetweenTextAndArrows: 2.2em !default;
+
+// Curl dimensions
+$curlWidth: 25px !default;
+$curlHeight: 25px !default;
+
+// Curl colors
+$revealAreaColor: white !default;    // reveal area behind the curl
+$curlLineColor: #aaa !default;       // crease line
+$curlTransitionColor: #ccc !default;	// color transitioning from crease line to final color
+$curlLastColor: white !default;		// final color of the back of the curl
+
+// Browser Prefixes - Which CSS prefixes should be used?
+$webkit: true !default;
+$moz: false !default;
+$ms: false !default;
+$o: false !default;
+
+// Compile with or without classes
+$includeClasses: true !default;
+
+
+// prefix declarations
+@mixin prefixed($property, $value) {
+  @if $webkit == true {
+    -webkit-#{$property}: #{$value};
+  }
+
+  @if $moz == true {
+    -moz-#{$property}: #{$value};
+  }
+
+  @if $ms == true {
+    -ms-#{$property}: #{$value};
+  }
+
+  @if $o == true {
+    -o-#{$property}: #{$value};
+  }
+
+  #{$property}: #{$value};
+}
+
+// prefix keyframes
+@mixin keyframes($name) {
+  @if $webkit == true {
+    @-webkit-keyframes #{$name} {
+      @content;
+    }
+  }
+
+  @if $moz == true {
+    @-moz-keyframes #{$name} {
+      @content;
+    }
+  }
+
+  @if $ms == true {
+    @-ms-keyframes #{$name} {
+      @content;
+    }
+  }
+
+  @if $o == true {
+    @-o-keyframes #{$name} {
+      @content;
+    }
+  }
+
+  @keyframes #{$name} {
+    @content;
+  }
+}
+
+
+@mixin hardwareAccel() {
+	// Improve performance on mobile/tablet devices
+	@include prefixed(transform, translateZ(0));
+}
+
+@mixin improveAntiAlias() {
+	// Improve aliasing on mobile/tablet devices
+	box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+}
+
+@mixin fontSmooth() {
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+@mixin forceBlockLevel() {
+	// Transforms need to be block-level to work
+	display: inline-block;
+	vertical-align: middle;
+}
+
+@mixin hacks() {
+	@include forceBlockLevel();
+	@include hardwareAccel();
+	@include improveAntiAlias();
+	@include fontSmooth();
+}
+
+
+@mixin float-shadow {
+	@include hacks();
+	position: relative;
+	@include prefixed(transition-duration, $mediumDuration);
+	@include prefixed(transition-property, transform);
+
+	&:before {
+	  pointer-events: none;
+	  position: absolute;
+	  z-index: -1;
+	  content: '';
+	  top: 100%;
+	  left: 5%;
+	  height: 10px;
+	  width: 90%;
+	  opacity: 0;
+	  background: -webkit-radial-gradient(center, ellipse, rgba(0,0,0,.35) 0%, rgba(0, 0, 0, 0) 80%);
+	  background: radial-gradient(ellipse at center, rgba(0,0,0,.35) 0%,rgba(0,0,0,0) 80%); /* W3C */
+		@include prefixed(transition-duration, $mediumDuration);
+		@include prefixed(transition-property, "transform, opacity");
+	}
+
+	&:hover,
+	&:focus,
+	&:active {
+		@include prefixed(transform, translateY(-5px)); /* move the element up by 5px */
+
+		&:before {
+			opacity: 1;
+			@include prefixed(transform, translateY(5px)); /* move the element down by 5px (it will stay in place because it's attached to the element that also moves up 5px) */
+		}
+	}
+}
+
+@mixin float {
+	@include hacks();
+	@include prefixed(transition-duration, $mediumDuration);
+	@include prefixed(transition-property, transform);
+	@include prefixed(transition-timing-function, ease-out);
+
+	&:hover,
+	&:focus,
+	&:active {
+		@include prefixed(transform, translateY(-8px));
+	}
+}
+
+
+/* ---------------------------------- END MIXIN STUFF C+P --------------------------------------*/
+
+
+@mixin linx
+{
+	a
+	{
+		&,
+		&:link,
+		&:visited,
+		&:hover,
+		{
+			text-decoration: none;
+			color: $TEXT_COLOR;
+			font-family: $TEXT_FONT;
+			font-size: $TEXT_SIZE;
+			text-align: center;
+			display: block;
+		}
+		&:active
+		{
+			text-decoration: none;
+			background-color: $TEXT_CLICKED_COLOR;
+			font-family: $TEXT_FONT;
+			font-size: $TEXT_SIZE;
+			text-align: center;
+			display: block;
+		}
+	}
+}
+
+*
+{
+	margin:0;
+	padding:0;
+}
+
+#main
+{
+	width: 100%;
+	height: 700px;
+}
+
+#banner
+{
+	position: relative;
+	background-color: black;
+	height: $BANNER_HEIGHT;
+	width: 100%;
+	float: right;
+	border-bottom: 5px solid pink;
+}
+
+#icon
+{
+	background-color: pink;
+	height: $ICON_HEIGHT_HALF;
+	width: $ICON_HEIGHT_HALF;
+}
+
+#icon-top-right
+{
+	@extend #icon;
+	float: right;
+	position: absolute;
+	bottom: 0px;
+	left: 50%;
+}
+
+#icon-top-left
+{
+	@extend #icon;
+	float: left;
+	position: absolute;
+	bottom: 0px;
+	right: 50%;
+}
+
+#wrapper
+{
+	float:left;
+	width:100%;
+	position: relative;
+	
+}
+
+#icon-bottom-left
+{
+	@extend #icon;
+	float:right;
+	position: absolute;
+	left: 50%;
+}
+
+#icon-bottom-right
+{
+	@extend #icon;
+	float: left;
+	position: absolute;
+	right: 50%;
+	
+	
+}
+
+.nav-bar
+{
+	background-color: none;
+	float: left;
+	width: 100%;
+	margin-top: $NAVBAR_DIST;
+}
+
+.nav-bar li
+{
+	@include linx;
+	@include float;
+	display: table-cell;
+    height: $BUTTON_SIZE;
+    width: 16.666666667vw;  /* (100 / numItems)% */
+    line-height: $BUTTON_SIZE;
+    text-align: center;
+    background: $BUTTON_COLOR;
+    border-right: 1px solid #fff;
+    white-space: nowrap;
+	
+}
+
+
